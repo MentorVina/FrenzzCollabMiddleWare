@@ -1,0 +1,4 @@
+com\niit\restcontroller\ForumController.class
+com\niit\config\WebInitializer.class
+com\niit\restcontroller\BlogController.class
+com\niit\config\WebResolver.class
