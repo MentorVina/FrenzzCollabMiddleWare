@@ -32,7 +32,7 @@ public class UserController {
 	public ResponseEntity<List<User>> getListUsers()
 	{
 		System.out.println("rest controller in User list");
-		List<User> listUsers=userDAO.listUser("aditi@gmail.com");
+		List<User> listUsers=userDAO.listUser("pranali@yahoo.com");
 		return new ResponseEntity<List<User>>(listUsers,HttpStatus.OK);
 
 	}
@@ -61,10 +61,10 @@ public class UserController {
 		
 		//--------------------Get User By Id---------------------------------//
 		
-		@RequestMapping(value = "/getUserById/{userId}", method = RequestMethod.GET)
-	    public ResponseEntity<User> get(@PathVariable("userId") int userId){
+		@RequestMapping(value = "/getUserById/{loginName}", method = RequestMethod.GET)
+	    public ResponseEntity<User> get(@PathVariable("loginName") String loginName){
 	        
-	        User user = userDAO.getUser(userId);
+	        User user = userDAO.getUser(loginName);
 
 	        if (user == null){
 	           
@@ -77,10 +77,10 @@ public class UserController {
 		
 		//--------------------Update User By Id----------------------------//
 		
-		 @RequestMapping(value = "/UpdateUser/{userId}", method = RequestMethod.PUT)
-		    public ResponseEntity<User> update(@PathVariable("userId") int userId){
+		 @RequestMapping(value = "/UpdateUser/{loginName}", method = RequestMethod.PUT)
+		    public ResponseEntity<User> update(@PathVariable("loginName") String loginName){
 		       
-			   User users = userDAO.getUser(userId);
+			   User users = userDAO.getUser(loginName);
 
 		        if (users == null){
 		            
@@ -98,11 +98,11 @@ public class UserController {
 		 
 		//------------------------Delete Blog By Id-----------------------//
 		 
-		 @RequestMapping(value ="/deleteUser/{userId}",method=RequestMethod.DELETE)
-		 public ResponseEntity<String> deleteuser(@PathVariable("userId") int userId) 
+		 @RequestMapping(value ="/deleteUser/{loginName}",method=RequestMethod.DELETE)
+		 public ResponseEntity<String> deleteuser(@PathVariable("loginName")String loginName) 
 		 {
 		       
-			   User users = userDAO.getUser(userId);
+			   User users = userDAO.getUser("Monali");
 
 		        if (users == null){
 		            
@@ -116,5 +116,21 @@ public class UserController {
 		        return new ResponseEntity<String>("Success", HttpStatus.OK);
 		    }
 		 
+		 @PostMapping(value="/login")
+		 public ResponseEntity<User>checklogin(@RequestBody User user)
+		 {
+			 if(userDAO.checkLogin(user))
+			 {
+				 User user1=(User)userDAO.getUser(user.getLoginName());
+				 userDAO.updateOnlineStatus("Y", user1);
+				 return new ResponseEntity<User>(user1,HttpStatus.OK);
+				 
+			 }
+			 
+			 else
+			 {
+				 return new ResponseEntity<User>(user,HttpStatus.INTERNAL_SERVER_ERROR);
+			 }
+		 }
 		
 }

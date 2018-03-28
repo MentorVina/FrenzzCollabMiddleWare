@@ -52,8 +52,8 @@ public class BlogController {
 		
 		blog.setCreateDate(new java.util.Date());
 		blog.setLikes(0);
-		blog.setUsername("Amol");
-		blog.setStatus("A");
+		blog.setUsername("Mona");
+		blog.setStatus("NA");
 		if(blogDAO.addBlog(blog))
 		{
 			return new ResponseEntity<String>("Success",HttpStatus.OK);
