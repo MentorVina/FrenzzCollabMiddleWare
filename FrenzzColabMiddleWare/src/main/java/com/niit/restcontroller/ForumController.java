@@ -2,6 +2,8 @@ package com.niit.restcontroller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.niit.DAO.ForumDAO;
-import com.niit.Model.Blog;
-import com.niit.Model.BlogComment;
+
 import com.niit.Model.Forum;
 import com.niit.Model.ForumComment;
 
@@ -35,10 +36,10 @@ public class ForumController {
 	//--------------------------Get All List-----------------------------------//
 	
 	@GetMapping(value="/listForums")
-	public ResponseEntity<List<Forum>> getListForums()
+	public ResponseEntity<List<Forum>> getListForums(HttpSession session)
 	{
 		System.out.println("rest controller in list");
-		List<Forum> listForums=forumDAO.listForum("Kajal");
+		List<Forum> listForums=forumDAO.listForum((String)session.getAttribute("username"));
 		return new ResponseEntity<List<Forum>>(listForums,HttpStatus.OK);
 		
 	}
@@ -47,14 +48,15 @@ public class ForumController {
 	
 	
 	@PostMapping(value="/addForum"  )
-	public ResponseEntity<String>addforum(@RequestBody Forum forum)
+	public ResponseEntity<String>addforum(@RequestBody Forum forum,HttpSession session)
 	{
 		System.out.println("rest controller in add");
 		
 		forum.setCreateDate(new java.util.Date());
 	
-		forum.setUsername("Rohan");
 		forum.setStatus("A");
+		
+		forum.setUsername((String)session.getAttribute("username"));
 		if(forumDAO.addForum(forum))
 		{
 			return new ResponseEntity<String>("Success",HttpStatus.OK);

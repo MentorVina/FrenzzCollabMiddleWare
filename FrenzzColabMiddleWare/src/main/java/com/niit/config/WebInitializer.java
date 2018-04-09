@@ -1,5 +1,8 @@
 package com.niit.config;
 
+
+
+
 import javax.servlet.ServletRegistration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -16,9 +19,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		registration.setAsyncSupported(true);
 	}
 	
-	
-	
-	
+
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
@@ -37,5 +38,5 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		return  new String[] { "/" };
 	}
 	
-
+	 
 }

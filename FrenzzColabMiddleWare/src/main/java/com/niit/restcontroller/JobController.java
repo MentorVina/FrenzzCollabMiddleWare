@@ -29,7 +29,7 @@ public class JobController {
 	public ResponseEntity<List<Job>> getListJobs()
 	{
 		System.out.println("rest controller in job list");
-		List<Job> listJobs=jobDAO.listJob(62) ;
+		List<Job> listJobs=jobDAO.listJob();
 		return new ResponseEntity<List<Job>>(listJobs,HttpStatus.OK);
 
 	}
@@ -40,9 +40,9 @@ public class JobController {
 	public ResponseEntity<String>addjob(@RequestBody Job job)
 	{
 		System.out.println("rest controller in addJob");
-		job.setCompany("Unisoft.Pvt.Ltd");
+		
 		job.setLastDateApply(new java.util.Date());
-		job.setSalary(35000);
+
 		
 		if(jobDAO.addJob(job))
 		{

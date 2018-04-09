@@ -2,6 +2,8 @@ package com.niit.restcontroller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.niit.DAO.UserDAO;
-import com.niit.Model.Blog;
+
 import com.niit.Model.User;
 
 @RestController
@@ -37,6 +39,8 @@ public class UserController {
 
 	}
 	
+	@Autowired
+	HttpSession session;
 	
 	//---------------------------Add Into User---------------------------------//
 	
@@ -44,6 +48,9 @@ public class UserController {
 		public ResponseEntity<String>addUser(@RequestBody User user)
 		{
 			System.out.println("rest controller in adduser");
+			
+			 user.setRole("ROLEUSER");
+			 user.setIsOnline("N");
 			
 			if(userDAO.addUser(user))
 			{
@@ -116,6 +123,7 @@ public class UserController {
 		        return new ResponseEntity<String>("Success", HttpStatus.OK);
 		    }
 		 
+		 
 		 @PostMapping(value="/login")
 		 public ResponseEntity<User>checklogin(@RequestBody User user)
 		 {
@@ -123,6 +131,7 @@ public class UserController {
 			 {
 				 User user1=(User)userDAO.getUser(user.getLoginName());
 				 userDAO.updateOnlineStatus("Y", user1);
+				 session.setAttribute("username",user.getLoginName());
 				 return new ResponseEntity<User>(user1,HttpStatus.OK);
 				 
 			 }
