@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.niit.DAO.UserDAO;
-
+import com.niit.Model.Blog;
 import com.niit.Model.User;
 
 @RestController
@@ -84,22 +84,22 @@ public class UserController {
 		
 		//--------------------Update User By Id----------------------------//
 		
-		 @RequestMapping(value = "/UpdateUser/{loginName}", method = RequestMethod.PUT)
-		    public ResponseEntity<User> update(@PathVariable("loginName") String loginName){
-		       
-			   User users = userDAO.getUser(loginName);
+		@RequestMapping(value = "/UpdateUser/{loginName}", method = RequestMethod.PUT)
+	    public ResponseEntity<User> updateUser(@PathVariable("loginName") String loginName, @RequestBody User user){
+		  System.out.println("---Update user for edit---");
+		   User users =userDAO.getUser(loginName);
 
-		        if (users == null){
-		            
-		            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-		        }
+	        if (users == null){
+	            System.out.println("Not Found");
+	            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+	        }
 
-		                     users.setContactNo(users.getContactNo()); 
-		                    
-		                       userDAO.updateUser(users);
-		        
-		        return new ResponseEntity<User>(users, HttpStatus.OK);
-		    }
+	                     users.setAge(user.getAge()); 
+	                    
+	                       userDAO.updateUser(users);
+	                       System.out.println("Data updated");
+	        return new ResponseEntity<User>(users, HttpStatus.OK);
+	    }
 		
 		 
 		 
@@ -142,4 +142,25 @@ public class UserController {
 			 }
 		 }
 		
+		 
+		 
+		 
+		 
+		 @PostMapping(value="/logout")
+		 public ResponseEntity<User>checklogout(@RequestBody User user)
+		 {
+			 if(userDAO.checkLogin(user))
+			 {
+				 User user1=(User)userDAO.getUser(user.getLoginName());
+				 userDAO.updateOnlineStatus("N", user1);
+				 session.setAttribute("username",user.getLoginName());
+				 return new ResponseEntity<User>(user1,HttpStatus.OK);
+				 
+			 }
+			 
+			 else
+			 {
+				 return new ResponseEntity<User>(user,HttpStatus.INTERNAL_SERVER_ERROR);
+			 }
+		 }
 }
